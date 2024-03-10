@@ -2,8 +2,11 @@
 #include "keymap_french.h"
 #include "sendstring_french.h"
 #include "process_key_override.h"
+#include "process_tap_dance.h"
 
 #include "features/achordion.h"
+
+#include "print.h"
 
 // TODO
 // - special key on all layers
@@ -11,22 +14,23 @@
 // - top row
 
 enum {
-    HOME_PLUS = SAFE_RANGE,
+    HOME_PLUS,
+    CT_DOT,
 };
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-    C(FR_Z),            FR_1,           KC_2,         KC_3,            KC_4,              KC_5,      /* */        KC_6,           FR_UNDS,        KC_8,           KC_9,           KC_0,           KC_MINUS,
+    QK_BOOTLOADER,      FR_1,           KC_2,         KC_3,            KC_4,              KC_5,      /* */        KC_6,           FR_UNDS,        KC_8,           KC_9,           KC_0,           KC_MINUS,
     KC_TAB,             FR_AGRV,        FR_J,         LT(0, FR_O),     FR_EACU,           FR_B,      /* */        FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_Q,           FR_X,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */        FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
-    C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  LT(0, FR_DOT),     FR_W,      /* */        FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           FR_Z,
+    C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */        FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           FR_Z,
                                                                         LT(1, KC_ENTER), KC_ESC,     /* */        LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
   ),
   [1] = LAYOUT(
     KC_F1,          KC_F2,           KC_F3,           KC_F4,            KC_F5,            KC_F6,     /* */        KC_F7,          KC_F8,          KC_F9,          KC_F10,          KC_F11,         KC_F12,
     KC_TRANSPARENT, FR_QUOT,         FR_LABK,         FR_RABK,          FR_DQUO,          FR_DOT,    /* */        FR_AMPR,        FR_SCLN,        FR_LBRC,        FR_RBRC,         FR_PERC,        KC_NO,
-    KC_TRANSPARENT, LGUI_T(FR_EXLM), LALT_T(FR_MINS), HOME_PLUS,        LCTL_T(FR_EQL),   FR_HASH,   /* */        FR_PIPE,        FR_COLN,        FR_LPRN,        FR_RPRN,         FR_QUES,        KC_BACKSPACE,
+    KC_TRANSPARENT, LGUI_T(FR_EXLM), LALT_T(FR_MINS), TD(HOME_PLUS),    LCTL_T(FR_EQL),   FR_HASH,   /* */        FR_PIPE,        FR_COLN,        FR_LPRN,        FR_RPRN,         FR_QUES,        KC_BACKSPACE,
     KC_TRANSPARENT, FR_CIRC,         FR_SLSH,         FR_ASTR,          FR_BSLS,          KC_NO,     /* */        FR_TILD,        FR_DLR,         FR_LCBR,        FR_RCBR,         FR_AT,          KC_ENTER,
                                                                    KC_TRANSPARENT, KC_TRANSPARENT,   /* */        KC_TRANSPARENT, KC_TRANSPARENT
   ),
@@ -41,7 +45,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &ko_make_basic(MOD_MASK_SHIFT, FR_DOT, FR_COLN),                //
     &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),               //
     &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),               //
     &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),               //
@@ -64,8 +67,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    static uint16_t home_plus_timer = 0;
-
     switch (keycode) {
         case LT(0, FR_Y):
             if (!record->tap.count && record->event.pressed) {
@@ -79,23 +80,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;
-        case LT(0, FR_DOT):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(FR_V)); // Intercept hold function to send Ctrl-V
-                return false;
-            }
-            return true;
-        case HOME_PLUS:
-            if(record->event.pressed) {
-                home_plus_timer = timer_read();
-                register_code(KC_LSFT);
-            } else {
-                unregister_code(KC_LSFT);
-                if (timer_elapsed(home_plus_timer) < TAPPING_TERM) {
-                    SEND_STRING("+");
-                }
-            }
-            return false; // We handled this keypress
     }
 
     return true;
@@ -118,3 +102,74 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
 
     return 800; // Otherwise use a timeout of 800 ms.
 }
+
+typedef struct {
+    uint16_t tap;
+    uint16_t tap_shifted;
+    uint16_t hold;
+    uint16_t held;
+} tap_dance_tap_hold_t;
+
+void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
+    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
+
+    if (state->pressed)
+#ifndef PERMISSIVE_HOLD
+        &&!state->interrupted
+#endif
+        {
+            register_code16(tap_hold->hold);
+            tap_hold->held = tap_hold->hold;
+        }
+}
+
+void tap_dance_tap_hold_released(tap_dance_state_t *state, void *user_data) {
+    if (state->finished) {
+        return;
+    }
+
+    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
+
+    const uint8_t saved_mods = get_mods();
+#ifndef NO_ACTION_ONESHOT
+    const uint8_t mods = saved_mods | get_weak_mods() | get_oneshot_mods();
+#else
+    const uint8_t mods = saved_mods | get_weak_mods();
+#endif // NO_ACTION_ONESHOT
+
+    if ((mods & MOD_MASK_SHIFT) != 0) // Shift is held
+    {
+        if ((QK_MODS_GET_MODS(tap_hold->tap_shifted) & MOD_LSFT) != 0) // Key requires Shift
+        {
+            tap_code16(tap_hold->tap_shifted); // If so, press directly.
+        } else {
+            // If not, cancel shift mods, press the key, and restore mods.
+            del_weak_mods(MOD_MASK_SHIFT);
+#ifndef NO_ACTION_ONESHOT
+            del_oneshot_mods(MOD_MASK_SHIFT);
+#endif // NO_ACTION_ONESHOT
+            unregister_mods(MOD_MASK_SHIFT);
+            tap_code16(tap_hold->tap_shifted);
+            set_mods(mods);
+        }
+    } else {
+        tap_code16(tap_hold->tap);
+    }
+}
+
+void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {
+    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
+
+    if (tap_hold->held) {
+        unregister_code16(tap_hold->held);
+        tap_hold->held = 0;
+    }
+}
+
+#define ACTION_TAP_DANCE_TAP_HOLD(tap, tap_shifted, hold) \
+    { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset, tap_dance_tap_hold_released}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, tap_shifted, hold, 0}), }
+
+tap_dance_action_t tap_dance_actions[] = {
+    [HOME_PLUS] = ACTION_TAP_DANCE_TAP_HOLD(FR_PLUS, KC_NO, KC_LSFT),
+    [CT_DOT]    = ACTION_TAP_DANCE_TAP_HOLD(FR_DOT, FR_COLN, C(FR_V)),
+};
