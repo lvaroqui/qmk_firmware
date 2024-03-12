@@ -22,7 +22,7 @@ enum {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
     QK_BOOTLOADER,      FR_1,           KC_2,         KC_3,            KC_4,              KC_5,      /* */        KC_6,           FR_UNDS,        KC_8,           KC_9,           KC_0,           KC_MINUS,
-    KC_TAB,             FR_AGRV,        FR_J,         LT(0, FR_O),     FR_EACU,           FR_B,      /* */        FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_Q,           FR_X,
+    KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,    FR_B,      /* */        FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_Q,           FR_X,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */        FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
     C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */        FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           FR_Z,
                                                                         LT(1, KC_ENTER), KC_ESC,     /* */        LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
@@ -68,6 +68,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
 
     switch (keycode) {
+        case FR_EACU:
+            if (!record->event.pressed) {
+                const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+                if (mods & MOD_MASK_SHIFT) {
+                    tap_code16(C(S(FR_U)));
+                    wait_ms(10);
+                    tap_code16(FR_C);
+                    wait_ms(10);
+                    tap_code16(FR_9);
+                } else {
+                    tap_code16(FR_EACU);
+                }
+            }
+            return false;
         case LT(0, FR_Y):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(C(FR_X)); // Intercept hold function to send Ctrl-X
