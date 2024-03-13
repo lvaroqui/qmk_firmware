@@ -21,8 +21,8 @@ enum {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-    QK_BOOTLOADER,      FR_1,           KC_2,         KC_3,            KC_4,              KC_5,      /* */        KC_6,           FR_UNDS,        KC_8,           KC_9,           KC_0,           KC_MINUS,
-    KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,    FR_B,      /* */        FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_Q,           FR_X,
+    QK_BOOTLOADER,      FR_1,           KC_2,         KC_3,            KC_4,              KC_5,      /* */        KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINUS,
+    KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */        FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_Q,           FR_X,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */        FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
     C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */        FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           FR_Z,
                                                                         LT(1, KC_ENTER), KC_ESC,     /* */        LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
@@ -69,7 +69,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
         case FR_EACU:
-            if (!record->event.pressed) {
+            if (record->event.pressed) {
                 const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
                 if (mods & MOD_MASK_SHIFT) {
                     tap_code16(C(S(FR_U)));
@@ -77,8 +77,40 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     tap_code16(FR_C);
                     wait_ms(10);
                     tap_code16(FR_9);
+                    wait_ms(10);
+
+                    del_weak_mods(MOD_MASK_SHIFT);
+        #ifndef NO_ACTION_ONESHOT
+                    del_oneshot_mods(MOD_MASK_SHIFT);
+        #endif // NO_ACTION_ONESHOT
+                    unregister_mods(MOD_MASK_SHIFT);
+                    tap_code16(KC_SPACE);
+                    set_mods(mods);
                 } else {
                     tap_code16(FR_EACU);
+                }
+            }
+            return false;
+        case FR_AGRV:
+            if (record->event.pressed) {
+                const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+                if (mods & MOD_MASK_SHIFT) {
+                    tap_code16(C(S(FR_U)));
+                    wait_ms(10);
+                    tap_code16(FR_C);
+                    wait_ms(10);
+                    tap_code16(FR_0);
+                    wait_ms(10);
+
+                    del_weak_mods(MOD_MASK_SHIFT);
+        #ifndef NO_ACTION_ONESHOT
+                    del_oneshot_mods(MOD_MASK_SHIFT);
+        #endif // NO_ACTION_ONESHOT
+                    unregister_mods(MOD_MASK_SHIFT);
+                    tap_code16(KC_SPACE);
+                    set_mods(mods);
+                } else {
+                    tap_code16(FR_AGRV);
                 }
             }
             return false;
@@ -111,6 +143,7 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
     switch (tap_hold_keycode) {
         case LT(1, KC_ENTER):
         case LT(2, KC_SPACE):
+        case LT(2, KC_BACKSPACE):
             return 0; // Bypass Achordion for these keys.
     }
 
