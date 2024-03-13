@@ -9,30 +9,31 @@
 #include "print.h"
 
 // TODO
-// - special key on all layers
-// - symbol layers
 // - top row
 
 enum {
-    HOME_PLUS,
+    HOME_SLSH,
+    HOME_AT,
+    HOME_LBRC,
+    HOME_LCBR,
     CT_DOT,
 };
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-    QK_BOOTLOADER,      FR_1,           KC_2,         KC_3,            KC_4,              KC_5,      /* */        KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINUS,
+    KC_NO,              FR_1,           FR_2,         FR_3,            FR_4,              FR_5,      /* */        FR_6,           FR_7,           FR_8,           FR_9,           FR_0,           KC_MINUS,
     KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */        FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_Q,           FR_X,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */        FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
     C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */        FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           FR_Z,
                                                                         LT(1, KC_ENTER), KC_ESC,     /* */        LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
   ),
   [1] = LAYOUT(
-    KC_F1,          KC_F2,           KC_F3,           KC_F4,            KC_F5,            KC_F6,     /* */        KC_F7,          KC_F8,          KC_F9,          KC_F10,          KC_F11,         KC_F12,
-    KC_TRANSPARENT, FR_QUOT,         FR_LABK,         FR_RABK,          FR_DQUO,          FR_DOT,    /* */        FR_AMPR,        FR_SCLN,        FR_LBRC,        FR_RBRC,         FR_PERC,        KC_NO,
-    KC_TRANSPARENT, LGUI_T(FR_EXLM), LALT_T(FR_MINS), TD(HOME_PLUS),    LCTL_T(FR_EQL),   FR_HASH,   /* */        FR_PIPE,        FR_COLN,        FR_LPRN,        FR_RPRN,         FR_QUES,        KC_BACKSPACE,
-    KC_TRANSPARENT, FR_CIRC,         FR_SLSH,         FR_ASTR,          FR_BSLS,          KC_NO,     /* */        FR_TILD,        FR_DLR,         FR_LCBR,        FR_RCBR,         FR_AT,          KC_ENTER,
-                                                                   KC_TRANSPARENT, KC_TRANSPARENT,   /* */        KC_TRANSPARENT, KC_TRANSPARENT
+    QK_BOOTLOADER,  KC_F1,           KC_F2,             KC_F3,            KC_F4,             KC_F5,   /* */     KC_F6,        KC_F7,           KC_F8,         KC_F9,          KC_F10,          KC_F11,
+    KC_TRANSPARENT, FR_HASH,         FR_PLUS,           FR_AMPR,          FR_DQUO,           KC_NO,   /* */     KC_NO,        FR_PIPE,         FR_TILD,       FR_PERC,        KC_NO,           KC_F12,
+    KC_TRANSPARENT, TD(HOME_AT),     TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   KC_NO,   /* */     KC_NO,        RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), KC_NO,
+    KC_TRANSPARENT, KC_NO,           FR_BSLS,           FR_ASTR,          FR_DOT,            KC_NO,   /* */     KC_NO,        FR_RPRN,         FR_RBRC,       FR_RCBR,        FR_RABK,         KC_NO,
+                                                                    KC_TRANSPARENT, KC_TRANSPARENT,   /* */     KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [2] = LAYOUT(
     RGB_TOG,        TOGGLE_LAYER_COLOR,RGB_MOD,        KC_TRANSPARENT,        RGB_VAD,        RGB_VAI,                                        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
@@ -80,9 +81,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     wait_ms(10);
 
                     del_weak_mods(MOD_MASK_SHIFT);
-        #ifndef NO_ACTION_ONESHOT
+#ifndef NO_ACTION_ONESHOT
                     del_oneshot_mods(MOD_MASK_SHIFT);
-        #endif // NO_ACTION_ONESHOT
+#endif // NO_ACTION_ONESHOT
                     unregister_mods(MOD_MASK_SHIFT);
                     tap_code16(KC_SPACE);
                     set_mods(mods);
@@ -103,9 +104,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                     wait_ms(10);
 
                     del_weak_mods(MOD_MASK_SHIFT);
-        #ifndef NO_ACTION_ONESHOT
+#ifndef NO_ACTION_ONESHOT
                     del_oneshot_mods(MOD_MASK_SHIFT);
-        #endif // NO_ACTION_ONESHOT
+#endif // NO_ACTION_ONESHOT
                     unregister_mods(MOD_MASK_SHIFT);
                     tap_code16(KC_SPACE);
                     set_mods(mods);
@@ -216,7 +217,12 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {
 #define ACTION_TAP_DANCE_TAP_HOLD(tap, tap_shifted, hold) \
     { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset, tap_dance_tap_hold_released}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, tap_shifted, hold, 0}), }
 
+// clang-format off
 tap_dance_action_t tap_dance_actions[] = {
-    [HOME_PLUS] = ACTION_TAP_DANCE_TAP_HOLD(FR_PLUS, KC_NO, KC_LSFT),
+    [HOME_SLSH] = ACTION_TAP_DANCE_TAP_HOLD(FR_SLSH, KC_NO, KC_LALT),
+    [HOME_AT]   = ACTION_TAP_DANCE_TAP_HOLD(FR_AT, KC_NO, KC_LGUI),
+    [HOME_LBRC] = ACTION_TAP_DANCE_TAP_HOLD(FR_LBRC, KC_NO, KC_RSFT),
+    [HOME_LCBR] = ACTION_TAP_DANCE_TAP_HOLD(FR_AT, KC_NO, KC_LALT),
     [CT_DOT]    = ACTION_TAP_DANCE_TAP_HOLD(FR_DOT, FR_COLN, C(FR_V)),
 };
+// clang-format on
