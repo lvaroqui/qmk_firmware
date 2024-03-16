@@ -16,10 +16,10 @@ enum {
     HOME_AT,
     HOME_LBRC,
     HOME_LCBR,
-    HOME_SYM_GUI,
-    HOME_SYM_ALT,
-    HOME_SYM_SHFT,
-    HOME_SYM_CTRL,
+    HOME_SHORT_GUI,
+    HOME_SHORT_ALT,
+    HOME_SHORT_SHFT,
+    HOME_SHORT_CTRL,
     CT_DOT,
 };
 
@@ -40,18 +40,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                     KC_TRANSPARENT, KC_TRANSPARENT,   /* */     KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [2] = LAYOUT(
-    KC_TRANSPARENT,     KC_NO,            KC_NO,            KC_NO,              KC_NO,             KC_NO,      /* */      KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT,     KC_NO,            S(C(FR_F)),       C(FR_F),            S(C(FR_COLN)),     KC_NO,      /* */      KC_PGUP,        KC_HOME,          KC_UP,         KC_END,         KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT,     TD(HOME_SYM_GUI), TD(HOME_SYM_ALT), TD(HOME_SYM_SHFT),  TD(HOME_SYM_CTRL), KC_NO,      /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,       KC_RIGHT,       KC_TRANSPARENT, FR_DIAE,
-    KC_TRANSPARENT,     KC_NO,            KC_NO,            KC_NO,              KC_NO,             KC_NO,      /* */      KC_TRANSPARENT, FR_CCED,          FR_UGRV,       KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-                                                                          KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT,     KC_NO,              S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,      /* */      KC_PGUP,        KC_HOME,          KC_UP,         KC_END,         KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,       KC_RIGHT,       KC_TRANSPARENT, FR_DIAE,
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, FR_CCED,          FR_UGRV,       KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+                                                                                  KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [3] = LAYOUT(
-    KC_TRANSPARENT,     KC_NO,            KC_NO,            KC_NO,              KC_NO,             KC_NO,      /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     KC_NO,            S(C(FR_F)),       C(FR_F),            S(C(FR_COLN)),     KC_NO,      /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     TD(HOME_SYM_GUI), TD(HOME_SYM_ALT), TD(HOME_SYM_SHFT),  TD(HOME_SYM_CTRL), KC_NO,      /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     KC_NO,            KC_NO,            KC_NO,              KC_NO,             KC_NO,      /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
-                                                                          KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,     KC_NO,              S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,      /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
+                                                                                  KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
 };
 // clang-format on
@@ -236,10 +236,10 @@ tap_dance_action_t tap_dance_actions[] = {
     [HOME_LBRC] = ACTION_TAP_DANCE_TAP_HOLD(FR_LBRC, KC_NO, KC_RSFT),
     [HOME_LCBR] = ACTION_TAP_DANCE_TAP_HOLD(FR_AT, KC_NO, KC_LALT),
     [CT_DOT]    = ACTION_TAP_DANCE_TAP_HOLD(FR_DOT, FR_COLN, C(FR_V)),
-    [HOME_SYM_GUI]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LGUI),
-    [HOME_SYM_ALT]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LALT),
-    [HOME_SYM_SHFT] = ACTION_TAP_DANCE_TAP_HOLD(S(FR_S), KC_NO, KC_LSFT),
-    [HOME_SYM_CTRL] = ACTION_TAP_DANCE_TAP_HOLD(C(S(FR_D)), KC_NO, KC_LCTL),
+    [HOME_SHORT_GUI]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LGUI),
+    [HOME_SHORT_ALT]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LALT),
+    [HOME_SHORT_SHFT] = ACTION_TAP_DANCE_TAP_HOLD(S(FR_S), KC_NO, KC_LSFT),
+    [HOME_SHORT_CTRL] = ACTION_TAP_DANCE_TAP_HOLD(C(S(FR_D)), KC_NO, KC_LCTL),
 };
 // clang-format on
 
