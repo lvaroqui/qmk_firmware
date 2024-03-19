@@ -27,9 +27,9 @@ enum {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
     KC_NO,              FR_1,           FR_2,         FR_3,            FR_4,              FR_5,      /* */     FR_6,           FR_7,           FR_8,           FR_9,           FR_0,           KC_MINUS,
-    KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */     FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_Q,           FR_X,
+    KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */     FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_X,           KC_NO,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */     FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
-    C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           FR_Z,
+    C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           KC_APP,
                                                                  LT(1, KC_ENTER), LT(3, KC_ESC),     /* */      LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
   ),
   [1] = LAYOUT(
@@ -55,6 +55,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 // clang-format on
+
+const uint16_t PROGMEM combo_d_l[]  = {FR_D, FR_L, COMBO_END};
+const uint16_t PROGMEM combo_c_m[]  = {FR_C, FR_M, COMBO_END};
+const uint16_t PROGMEM combo_m_h[]  = {FR_M, FR_H, COMBO_END};
+combo_t                key_combos[] = {
+    COMBO(combo_d_l, FR_Q),    //
+    COMBO(combo_c_m, FR_CCED), //
+    COMBO(combo_m_h, FR_Z),    //
+};
 
 #define PPCAT_NX(A, B) A##B
 #define GUI_NUM(num, key) &ko_make_basic(MOD_MASK_GUI | MOD_MASK_SHIFT, PPCAT_NX(FR_, num), G(S(key))), &ko_make_basic(MOD_MASK_GUI, PPCAT_NX(FR_, num), G(key))
