@@ -56,10 +56,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+#define PPCAT_NX(A, B) A##B
+#define GUI_NUM(num, key) &ko_make_basic(MOD_MASK_GUI | MOD_MASK_SHIFT, PPCAT_NX(FR_, num), G(S(key))), &ko_make_basic(MOD_MASK_GUI, PPCAT_NX(FR_, num), G(key))
+
 const key_override_t **key_overrides = (const key_override_t *[]){
     &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),             //
     &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),             //
     &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),             //
+    &ko_make_basic(MOD_MASK_GUI, FR_1, G(FR_AMPR)),               //
+    GUI_NUM(0, FR_AGRV),                                          //
+    GUI_NUM(1, FR_AMPR),                                          //
+    GUI_NUM(2, FR_EACU),                                          //
+    GUI_NUM(3, FR_DQUO),                                          //
+    GUI_NUM(4, FR_QUOT),                                          //
+    GUI_NUM(5, FR_LPRN),                                          //
+    GUI_NUM(6, FR_MINS),                                          //
+    GUI_NUM(7, FR_EGRV),                                          //
+    GUI_NUM(8, FR_UNDS),                                          //
+    GUI_NUM(9, FR_CCED),                                          //
     &ko_make_basic(MOD_MASK_ALT, LT(2, KC_BACKSPACE), KC_DELETE), //
     NULL                                                          // Null terminate the array of overrides!
 };
@@ -158,6 +172,8 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
         case LT(2, KC_BACKSPACE):
         case LT(3, KC_ESC):
             return 0; // Bypass Achordion for these keys.
+        case LALT_T(FR_I):
+            return TAPPING_TERM;
     }
 
     return 800; // Otherwise use a timeout of 800 ms.
