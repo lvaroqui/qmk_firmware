@@ -257,7 +257,7 @@ tap_dance_action_t tap_dance_actions[] = {
     [HOME_SLSH] = ACTION_TAP_DANCE_TAP_HOLD(FR_SLSH, KC_NO, KC_LALT),
     [HOME_AT]   = ACTION_TAP_DANCE_TAP_HOLD(FR_AT, KC_NO, KC_LGUI),
     [HOME_LBRC] = ACTION_TAP_DANCE_TAP_HOLD(FR_LBRC, KC_NO, KC_RSFT),
-    [HOME_LCBR] = ACTION_TAP_DANCE_TAP_HOLD(FR_AT, KC_NO, KC_LALT),
+    [HOME_LCBR] = ACTION_TAP_DANCE_TAP_HOLD(FR_LCBR, KC_NO, KC_LALT),
     [CT_DOT]    = ACTION_TAP_DANCE_TAP_HOLD(FR_DOT, FR_COLN, C(FR_V)),
     [HOME_SHORT_GUI]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LGUI),
     [HOME_SHORT_ALT]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LALT),
@@ -319,4 +319,26 @@ bool caps_word_press_user(uint16_t keycode) {
         default:
             return false; // Deactivate Caps Word.
     }
+}
+
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    for (uint8_t i = led_min; i < led_max; i++) {
+        switch (get_highest_layer(layer_state | default_layer_state)) {
+            case 2:
+                if (i == 34 || i == 39 || i == 40 || i == 41) {
+                    rgb_matrix_set_color(i, RGB_GREEN);
+                } else
+                    rgb_matrix_set_color(i, RGB_CYAN);
+                break;
+            case 1:
+                rgb_matrix_set_color(i, RGB_GOLD);
+                break;
+            case 0:
+                rgb_matrix_set_color(i, RGB_TEAL);
+                break;
+            default:
+                break;
+        }
+    }
+    return false;
 }
