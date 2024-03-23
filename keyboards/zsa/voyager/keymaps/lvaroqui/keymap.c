@@ -26,7 +26,7 @@ enum {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-    KC_NO,              FR_1,           FR_2,         FR_3,            FR_4,              FR_5,      /* */     FR_6,           FR_7,           FR_8,           FR_9,           FR_0,           KC_MINUS,
+    DB_TOGG,            FR_1,           FR_2,         FR_3,            FR_4,              FR_5,      /* */     FR_6,           FR_7,           FR_8,           FR_9,           FR_0,           KC_MINUS,
     KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */     FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_X,           KC_NO,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */     FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
     C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           KC_APP,
@@ -43,14 +43,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT,     KC_NO,              S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,      /* */      KC_PGUP,        KC_HOME,          KC_UP,         KC_END,          KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,       KC_RIGHT,        KC_TRANSPARENT, FR_DIAE,
-    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, FR_CCED,          FR_UGRV,       KC_TRANSPARENT,  KC_TRANSPARENT, S(C(FR_DOT)),
+    KC_TRANSPARENT,     KC_NO,              G(FR_Q),            KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, FR_CCED,          FR_UGRV,       KC_TRANSPARENT,  KC_TRANSPARENT, S(C(FR_DOT)),
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [3] = LAYOUT(
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     KC_NO,              S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,      /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
+    KC_TRANSPARENT,     KC_NO,              G(FR_Q),            KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
 };
@@ -181,11 +181,9 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
         case LT(2, KC_BACKSPACE):
         case LT(3, KC_ESC):
             return 0; // Bypass Achordion for these keys.
-        case LALT_T(FR_I):
-            return TAPPING_TERM;
     }
 
-    return 800; // Otherwise use a timeout of 800 ms.
+    return TAPPING_TERM; // Otherwise use a timeout of 800 ms.
 }
 
 typedef struct {
