@@ -13,7 +13,6 @@
 
 enum {
     HOME_SLSH,
-    HOME_AT,
     HOME_LBRC,
     HOME_LCBR,
     HOME_SHORT_GUI,
@@ -30,27 +29,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */     FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_X,           KC_NO,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */     FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
     C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           KC_APP,
-                                                                 LT(1, KC_ENTER), LT(3, KC_ESC),     /* */      LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
+                                                                 LT(1, KC_ENTER), LT(3, KC_ESC),     /* */     LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
   ),
   [1] = LAYOUT(
     QK_BOOTLOADER,  KC_F1,           KC_F2,             KC_F3,            KC_F4,             KC_F5,   /* */     KC_F6,        KC_F7,           KC_F8,         KC_F9,          KC_F10,          KC_F11,
     KC_TRANSPARENT, FR_HASH,         FR_PLUS,           FR_AMPR,          FR_DQUO,           KC_NO,   /* */     KC_NO,        FR_PIPE,         FR_TILD,       FR_PERC,        FR_GRV,          KC_F12,
-    KC_TRANSPARENT, TD(HOME_AT),     TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   FR_DLR,  /* */     KC_NO,        RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), KC_NO,
-    KC_TRANSPARENT, FR_EQL,          FR_BSLS,           FR_ASTR,          FR_DOT,            KC_NO,   /* */     KC_NO,        FR_RPRN,         FR_RBRC,       FR_RCBR,        FR_RABK,         KC_NO,
+    KC_TRANSPARENT, LGUI(FR_EQL),    TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   FR_DLR,  /* */     KC_NO,        RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), KC_NO,
+    KC_TRANSPARENT, FR_AT,           FR_BSLS,           FR_ASTR,          FR_DOT,            KC_NO,   /* */     KC_NO,        FR_RPRN,         FR_RBRC,       FR_RCBR,        FR_RABK,         KC_NO,
                                                                     KC_TRANSPARENT, KC_TRANSPARENT,   /* */     KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [2] = LAYOUT(
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT,     KC_NO,              S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,      /* */      KC_PGUP,        KC_HOME,          KC_UP,         KC_END,          KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,       KC_RIGHT,        KC_TRANSPARENT, FR_DIAE,
-    KC_TRANSPARENT,     KC_NO,              G(FR_Q),            KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, FR_CCED,          FR_UGRV,       KC_TRANSPARENT,  KC_TRANSPARENT, S(C(FR_DOT)),
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, FR_CCED,          FR_UGRV,       KC_TRANSPARENT,  KC_TRANSPARENT, S(C(FR_DOT)),
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [3] = LAYOUT(
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     KC_NO,              S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,      /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     KC_NO,              G(FR_Q),            KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
 };
@@ -83,7 +82,7 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     GUI_NUM(7, FR_EGRV),                                          //
     GUI_NUM(8, FR_UNDS),                                          //
     GUI_NUM(9, FR_CCED),                                          //
-    &ko_make_basic(MOD_MASK_ALT, LT(2, KC_BACKSPACE), KC_DELETE), //
+    &ko_make_basic(MOD_MASK_GUI, LT(2, KC_BACKSPACE), KC_DELETE), //
     NULL                                                          // Null terminate the array of overrides!
 };
 
@@ -255,13 +254,12 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {
 // clang-format off
 tap_dance_action_t tap_dance_actions[] = {
     [HOME_SLSH] = ACTION_TAP_DANCE_TAP_HOLD(FR_SLSH, KC_NO, KC_LALT),
-    [HOME_AT]   = ACTION_TAP_DANCE_TAP_HOLD(FR_AT, KC_NO, KC_LGUI),
     [HOME_LBRC] = ACTION_TAP_DANCE_TAP_HOLD(FR_LBRC, KC_NO, KC_RSFT),
     [HOME_LCBR] = ACTION_TAP_DANCE_TAP_HOLD(FR_LCBR, KC_NO, KC_LALT),
     [CT_DOT]    = ACTION_TAP_DANCE_TAP_HOLD(FR_DOT, FR_COLN, C(FR_V)),
     [HOME_SHORT_GUI]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LGUI),
-    [HOME_SHORT_ALT]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LALT),
-    [HOME_SHORT_SHFT] = ACTION_TAP_DANCE_TAP_HOLD(S(FR_S), KC_NO, KC_LSFT),
+    [HOME_SHORT_ALT]  = ACTION_TAP_DANCE_TAP_HOLD(G(FR_Q), KC_NO, KC_LALT),
+    [HOME_SHORT_SHFT] = ACTION_TAP_DANCE_TAP_HOLD(C(FR_S), KC_NO, KC_LSFT),
     [HOME_SHORT_CTRL] = ACTION_TAP_DANCE_TAP_HOLD(C(S(FR_D)), KC_NO, KC_LCTL),
 };
 // clang-format on
