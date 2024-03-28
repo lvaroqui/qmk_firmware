@@ -41,7 +41,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [2] = LAYOUT(
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
     KC_TRANSPARENT,     KC_NO,              S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,      /* */      KC_PGUP,        KC_HOME,          KC_UP,         KC_END,          KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,       KC_RIGHT,        KC_TRANSPARENT, FR_DIAE,
+    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_NO,      /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,       KC_RIGHT,        KC_TAB,         FR_DIAE,
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,      /* */      KC_TRANSPARENT, FR_CCED,          FR_UGRV,       KC_TRANSPARENT,  KC_TRANSPARENT, S(C(FR_DOT)),
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,      /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
@@ -68,22 +68,24 @@ combo_t                key_combos[] = {
 #define GUI_NUM(num, key) &ko_make_basic(MOD_MASK_GUI | MOD_MASK_SHIFT, PPCAT_NX(FR_, num), G(S(key))), &ko_make_basic(MOD_MASK_GUI, PPCAT_NX(FR_, num), G(key))
 
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),             //
-    &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),             //
-    &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),             //
-    &ko_make_basic(MOD_MASK_GUI, FR_1, G(FR_AMPR)),               //
-    GUI_NUM(0, FR_AGRV),                                          //
-    GUI_NUM(1, FR_AMPR),                                          //
-    GUI_NUM(2, FR_EACU),                                          //
-    GUI_NUM(3, FR_DQUO),                                          //
-    GUI_NUM(4, FR_QUOT),                                          //
-    GUI_NUM(5, FR_LPRN),                                          //
-    GUI_NUM(6, FR_MINS),                                          //
-    GUI_NUM(7, FR_EGRV),                                          //
-    GUI_NUM(8, FR_UNDS),                                          //
-    GUI_NUM(9, FR_CCED),                                          //
-    &ko_make_basic(MOD_MASK_GUI, LT(2, KC_BACKSPACE), KC_DELETE), //
-    NULL                                                          // Null terminate the array of overrides!
+    &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),                   //
+    &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),                   //
+    &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),                   //
+    &ko_make_basic(MOD_MASK_GUI, FR_1, G(FR_AMPR)),                     //
+    &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_HOME, S(KC_HOME)), //
+    &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_END, S(KC_END)),   //
+    GUI_NUM(0, FR_AGRV),                                                //
+    GUI_NUM(1, FR_AMPR),                                                //
+    GUI_NUM(2, FR_EACU),                                                //
+    GUI_NUM(3, FR_DQUO),                                                //
+    GUI_NUM(4, FR_QUOT),                                                //
+    GUI_NUM(5, FR_LPRN),                                                //
+    GUI_NUM(6, FR_MINS),                                                //
+    GUI_NUM(7, FR_EGRV),                                                //
+    GUI_NUM(8, FR_UNDS),                                                //
+    GUI_NUM(9, FR_CCED),                                                //
+    &ko_make_basic(MOD_MASK_GUI, LT(2, KC_BACKSPACE), KC_DELETE),       //
+    NULL                                                                // Null terminate the array of overrides!
 };
 
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
