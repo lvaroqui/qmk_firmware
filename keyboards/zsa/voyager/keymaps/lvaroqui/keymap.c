@@ -73,7 +73,6 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),                   //
     &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),                   //
     &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),                   //
-    &ko_make_basic(MOD_MASK_GUI, FR_1, G(FR_AMPR)),                     //
     &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_HOME, S(KC_HOME)), //
     &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_END, S(KC_END)),   //
     GUI_NUM(0, FR_AGRV),                                                //
