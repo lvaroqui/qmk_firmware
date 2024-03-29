@@ -46,20 +46,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [3] = LAYOUT(
-    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
+    TO(4),              KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     C(A(FR_UNDS)),      S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,        /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE, /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
+  [4] = LAYOUT(
+    TO(0),            KC_1,    KC_2,   KC_3,   KC_4,   KC_5,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,   FR_A,    FR_Z,   FR_E,   FR_R,   FR_T,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    KC_LEFT_SHIFT,    FR_Q,    FR_S,   FR_D,   FR_F,   FR_G,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    KC_LEFT_CTRL,     KC_NO,   FR_W,   FR_X,   FR_C,   FR_V,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                        KC_TRANSPARENT, KC_TRANSPARENT,        /* */    KC_TRANSPARENT, KC_TRANSPARENT
+  ),
 };
 // clang-format on
 
-const uint16_t PROGMEM combo_d_l[]  = {FR_D, FR_L, COMBO_END};
-const uint16_t PROGMEM combo_c_m[]  = {FR_C, FR_M, COMBO_END};
-const uint16_t PROGMEM combo_m_h[]  = {FR_M, FR_H, COMBO_END};
-const uint16_t PROGMEM combo_egrv_dot[]  = {LT(0, FR_EGRV), TD(CT_DOT), COMBO_END};
-combo_t                key_combos[] = {
+const uint16_t PROGMEM combo_d_l[]      = {FR_D, FR_L, COMBO_END};
+const uint16_t PROGMEM combo_c_m[]      = {FR_C, FR_M, COMBO_END};
+const uint16_t PROGMEM combo_m_h[]      = {FR_M, FR_H, COMBO_END};
+const uint16_t PROGMEM combo_egrv_dot[] = {LT(0, FR_EGRV), TD(CT_DOT), COMBO_END};
+combo_t                key_combos[]     = {
     COMBO(combo_d_l, FR_Q),         //
     COMBO(combo_c_m, FR_CCED),      //
     COMBO(combo_m_h, FR_Z),         //
@@ -70,24 +77,24 @@ combo_t                key_combos[] = {
 #define GUI_NUM(num, key) &ko_make_basic(MOD_MASK_GUI | MOD_MASK_SHIFT, PPCAT_NX(FR_, num), G(S(key))), &ko_make_basic(MOD_MASK_GUI, PPCAT_NX(FR_, num), G(key))
 
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),                   //
-    &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),                   //
-    &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),                   //
+    &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),                    //
+    &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),                    //
+    &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),                    //
     &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_HOME, S(KC_HOME)), //
     &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_END, S(KC_END)),   //
-    GUI_NUM(0, FR_AGRV),                                                //
-    GUI_NUM(1, FR_AMPR),                                                //
-    GUI_NUM(2, FR_EACU),                                                //
-    GUI_NUM(3, FR_DQUO),                                                //
-    GUI_NUM(4, FR_QUOT),                                                //
-    GUI_NUM(5, FR_LPRN),                                                //
-    GUI_NUM(6, FR_MINS),                                                //
-    GUI_NUM(7, FR_EGRV),                                                //
-    GUI_NUM(8, FR_UNDS),                                                //
-    GUI_NUM(9, FR_CCED),                                                //
-    &ko_make_basic(MOD_MASK_GUI, LT(2, KC_BACKSPACE), KC_DELETE),       //
-    &ko_make_basic(MOD_MASK_GUI, KC_BACKSPACE, KC_DELETE),              //
-    NULL                                                                // Null terminate the array of overrides!
+    GUI_NUM(0, FR_AGRV),                                                 //
+    GUI_NUM(1, FR_AMPR),                                                 //
+    GUI_NUM(2, FR_EACU),                                                 //
+    GUI_NUM(3, FR_DQUO),                                                 //
+    GUI_NUM(4, FR_QUOT),                                                 //
+    GUI_NUM(5, FR_LPRN),                                                 //
+    GUI_NUM(6, FR_MINS),                                                 //
+    GUI_NUM(7, FR_EGRV),                                                 //
+    GUI_NUM(8, FR_UNDS),                                                 //
+    GUI_NUM(9, FR_CCED),                                                 //
+    &ko_make_basic(MOD_MASK_GUI, LT(2, KC_BACKSPACE), KC_DELETE),        //
+    &ko_make_basic(MOD_MASK_GUI, KC_BACKSPACE, KC_DELETE),               //
+    NULL                                                                 // Null terminate the array of overrides!
 };
 
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
@@ -326,6 +333,9 @@ bool caps_word_press_user(uint16_t keycode) {
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     for (uint8_t i = led_min; i < led_max; i++) {
         switch (get_highest_layer(layer_state | default_layer_state)) {
+            case 4:
+                rgb_matrix_set_color(i, RGB_ORANGE);
+                break;
             case 3:
                 rgb_matrix_set_color(i, RGB_RED);
                 break;
