@@ -58,10 +58,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM combo_d_l[]  = {FR_D, FR_L, COMBO_END};
 const uint16_t PROGMEM combo_c_m[]  = {FR_C, FR_M, COMBO_END};
 const uint16_t PROGMEM combo_m_h[]  = {FR_M, FR_H, COMBO_END};
+const uint16_t PROGMEM combo_egrv_dot[]  = {LT(0, FR_EGRV), TD(CT_DOT), COMBO_END};
 combo_t                key_combos[] = {
-    COMBO(combo_d_l, FR_Q),    //
-    COMBO(combo_c_m, FR_CCED), //
-    COMBO(combo_m_h, FR_Z),    //
+    COMBO(combo_d_l, FR_Q),         //
+    COMBO(combo_c_m, FR_CCED),      //
+    COMBO(combo_m_h, FR_Z),         //
+    COMBO(combo_egrv_dot, FR_UGRV), //
 };
 
 #define PPCAT_NX(A, B) A##B
