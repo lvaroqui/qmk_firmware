@@ -53,11 +53,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [4] = LAYOUT(
-    TO(0),            KC_1,    KC_2,   KC_3,   KC_4,   KC_5,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,   FR_A,    FR_Z,   FR_E,   FR_R,   FR_T,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-    KC_LEFT_SHIFT,    FR_Q,    FR_S,   FR_D,   FR_F,   FR_G,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-    KC_LEFT_CTRL,     KC_NO,   FR_W,   FR_X,   FR_C,   FR_V,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
-                        KC_TRANSPARENT, KC_TRANSPARENT,        /* */    KC_TRANSPARENT, KC_TRANSPARENT
+    TO(0),            KC_5,  KC_1,    KC_2,   KC_3,   KC_4,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,   FR_T,  FR_A,    FR_Z,   FR_E,   FR_R,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    KC_LEFT_SHIFT,    FR_G,  FR_Q,    FR_S,   FR_D,   FR_F,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+    KC_LEFT_CTRL,     FR_V,  FR_W,    FR_X,   FR_C,   FR_B,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
+                            KC_TRANSPARENT, KC_TRANSPARENT,   /* */    KC_TRANSPARENT, KC_TRANSPARENT
   ),
 };
 // clang-format on
