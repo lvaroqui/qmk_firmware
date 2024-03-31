@@ -29,7 +29,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */     FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_X,           KC_NO,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */     FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
     C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           KC_APP,
-                                                                 LT(1, KC_ENTER), LT(3, KC_ESC),     /* */     LT(2, KC_BACKSPACE), LT(2, KC_SPACE)
+                                                                 LT(1, KC_ENTER), LT(3, KC_ESC),     /* */     LT(4, KC_BACKSPACE), LT(2, KC_SPACE)
   ),
   [1] = LAYOUT(
     QK_BOOTLOADER,  KC_F1,           KC_F2,             KC_F3,            KC_F4,             KC_F5,   /* */     KC_F6,        KC_F7,           KC_F8,         KC_F9,          KC_F10,          KC_F11,
@@ -46,13 +46,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [3] = LAYOUT(
-    TO(4),              KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
+    TO(5),              KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     C(A(FR_UNDS)),      S(C(FR_F)),         C(FR_F),              S(C(FR_COLN)),       KC_NO,        /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE, /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
     KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [4] = LAYOUT(
+    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     /* */     KC_NO,    KC_NO,                 KC_NO,                  KC_NO,                 KC_NO,      KC_NO,
+    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     /* */     KC_NO,    KC_MEDIA_PREV_TRACK,   KC_MEDIA_PLAY_PAUSE,    KC_MEDIA_NEXT_TRACK,   KC_NO,      KC_NO,
+    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     /* */     KC_NO,    KC_VOLD,               KC_MUTE,                KC_VOLU,               KC_NO,      KC_NO,
+    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     /* */     KC_NO,    KC_NO,                 A(FR_A),                KC_NO,                 KC_NO,      KC_NO,
+                                        KC_TRANSPARENT, KC_TRANSPARENT,     /* */     KC_TRANSPARENT, KC_TRANSPARENT
+  ),
+  [5] = LAYOUT(
     TO(0),            KC_5,  KC_1,    KC_2,   KC_3,   KC_4,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
     KC_TRANSPARENT,   FR_T,  FR_A,    FR_Z,   FR_E,   FR_R,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
     KC_LEFT_SHIFT,    FR_G,  FR_Q,    FR_S,   FR_D,   FR_F,   /* */    KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,
@@ -92,16 +99,13 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     GUI_NUM(7, FR_EGRV),                                                 //
     GUI_NUM(8, FR_UNDS),                                                 //
     GUI_NUM(9, FR_CCED),                                                 //
-    &ko_make_basic(MOD_MASK_GUI, LT(2, KC_BACKSPACE), KC_DELETE),        //
+    &ko_make_basic(MOD_MASK_GUI, LT(4, KC_BACKSPACE), KC_DELETE),        //
     &ko_make_basic(MOD_MASK_GUI, KC_BACKSPACE, KC_DELETE),               //
     NULL                                                                 // Null terminate the array of overrides!
 };
 
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(2, KC_BACKSPACE):
-        case LT(2, KC_SPACE):
-            return 200;
         default:
             return QUICK_TAP_TERM;
     }
@@ -188,7 +192,7 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
     switch (tap_hold_keycode) {
         case LT(1, KC_ENTER):
         case LT(2, KC_SPACE):
-        case LT(2, KC_BACKSPACE):
+        case LT(4, KC_BACKSPACE):
         case LT(3, KC_ESC):
             return 0; // Bypass Achordion for these keys.
     }
@@ -333,8 +337,17 @@ bool caps_word_press_user(uint16_t keycode) {
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     for (uint8_t i = led_min; i < led_max; i++) {
         switch (get_highest_layer(layer_state | default_layer_state)) {
-            case 4:
+            case 5:
                 rgb_matrix_set_color(i, RGB_ORANGE);
+                break;
+            case 4:
+                if (i == 39 || i == 40 || i == 41) {
+                    rgb_matrix_set_color(i, RGB_ORANGE);
+                } else if (i == 33 || i == 34 || i == 35) {
+                    rgb_matrix_set_color(i, RGB_BLUE);
+                } else {
+                    rgb_matrix_set_color(i, RGB_BLACK);
+                }
                 break;
             case 3:
                 rgb_matrix_set_color(i, RGB_RED);
