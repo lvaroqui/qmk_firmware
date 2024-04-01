@@ -1,15 +1,12 @@
 #include QMK_KEYBOARD_H
 #include "keymap_french.h"
-#include "sendstring_french.h"
+#include "sendstring_french.h" // IWYU pragma: keep
 #include "process_key_override.h"
 #include "process_tap_dance.h"
 
 #include "features/achordion.h"
 
-#include "print.h"
-
-// TODO
-// - top row
+#include "print.h" // IWYU pragma: keep
 
 enum {
     HOME_SLSH,
