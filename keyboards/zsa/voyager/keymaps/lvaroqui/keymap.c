@@ -106,6 +106,9 @@ const key_override_t **key_overrides = (const key_override_t *[]){
 
 uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
+        case LT(4, KC_BACKSPACE):
+        case LT(2, KC_SPACE):
+            return 200;
         default:
             return QUICK_TAP_TERM;
     }
