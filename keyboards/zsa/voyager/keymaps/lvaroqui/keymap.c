@@ -22,7 +22,7 @@ enum {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT(
-    DB_TOGG,            FR_1,           FR_2,         FR_3,            FR_4,              FR_5,      /* */     FR_6,           FR_7,           FR_8,           FR_9,           FR_0,           KC_MINUS,
+    DB_TOGG,            FR_1,           FR_2,         FR_3,            FR_4,              FR_5,      /* */     FR_6,           FR_7,           FR_8,           FR_9,           FR_0,           KC_PRINT_SCREEN,
     KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */     FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_X,           FR_UGRV,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */     FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
     C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           KC_APP,
