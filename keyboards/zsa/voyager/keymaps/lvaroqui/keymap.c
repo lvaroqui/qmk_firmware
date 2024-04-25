@@ -36,18 +36,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                     KC_TRANSPARENT, KC_TRANSPARENT,   /* */     KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [2] = LAYOUT(
-    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT,     C(A(FR_UNDS)),      KC_NO,              KC_NO,                S(C(FR_COLN)),       KC_NO,        /* */      KC_PGUP,        KC_HOME,          KC_UP,          KC_END,         KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE, /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,        KC_RIGHT,       KC_TAB,         FR_DIAE,
-    KC_TRANSPARENT,     S(C(FR_F)),         C(FR_F),            S(KC_F3),             KC_F3,               KC_F4,        /* */      KC_TRANSPARENT, KC_BTN4,          KC_F12,         KC_BTN5,        KC_TRANSPARENT, S(C(FR_DOT)),
-                                                                                  KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,          /* */      KC_TRANSPARENT, KC_TRANSPARENT,   KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT,     C(A(FR_UNDS)),      KC_NO,              KC_NO,                S(C(FR_COLN)),       S(C(FR_EXLM)),  /* */      KC_PGUP,        KC_HOME,          KC_UP,          KC_END,         KC_TRANSPARENT, KC_TRANSPARENT,
+    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE,   /* */      KC_PAGE_DOWN,   KC_LEFT,          KC_DOWN,        KC_RIGHT,       KC_TAB,         FR_DIAE,
+    KC_TRANSPARENT,     S(C(FR_F)),         C(FR_F),            S(KC_F3),             KC_F3,               KC_F4,          /* */      KC_TRANSPARENT, KC_BTN4,          KC_F12,         KC_BTN5,        KC_TRANSPARENT, S(C(FR_DOT)),
+                                                                                  KC_TRANSPARENT, KC_TRANSPARENT,          /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [3] = LAYOUT(
-    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,        /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     C(A(FR_UNDS)),      KC_NO,              KC_NO,                S(C(FR_COLN)),       KC_NO,        /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE, /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
-    KC_TRANSPARENT,     S(C(FR_F)),         C(FR_F),            S(KC_F3),             KC_F3,               KC_F4,        /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
-                                                                                  KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                KC_NO,               KC_NO,          /* */      KC_NO,       FR_7,      FR_8,      FR_9,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,     C(A(FR_UNDS)),      KC_NO,              KC_NO,                S(C(FR_COLN)),       S(C(FR_EXLM)),  /* */      KC_NO,       FR_4,      FR_5,      FR_6,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,     TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE,   /* */      KC_NO,       FR_1,      FR_2,      FR_3,      KC_NO,      KC_NO,
+    KC_TRANSPARENT,     S(C(FR_F)),         C(FR_F),            S(KC_F3),             KC_F3,               KC_F4,          /* */      KC_NO,       FR_0,      FR_DOT,    FR_COMM,   KC_NO,      KC_NO,
+                                                                                  KC_TRANSPARENT, KC_TRANSPARENT,          /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [4] = LAYOUT(
     KC_NO,       KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,     /* */     KC_NO,    KC_NO,                 KC_NO,                  KC_NO,                 KC_NO,      KC_NO,
