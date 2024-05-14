@@ -31,7 +31,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [1] = LAYOUT(
     QK_BOOTLOADER,  KC_F1,           KC_F2,             KC_F3,            KC_F4,             KC_F5,   /* */     KC_F6,        KC_F7,           KC_F8,         KC_F9,          KC_F10,          KC_F11,
     KC_TRANSPARENT, FR_HASH,         FR_PLUS,           FR_AMPR,          FR_DQUO,           KC_NO,   /* */     KC_NO,        FR_PIPE,         FR_TILD,       FR_PERC,        FR_GRV,          KC_F12,
-    KC_TRANSPARENT, LGUI_T(FR_EQL),  TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   FR_DLR,  /* */     KC_NO,        RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), KC_NO,
+    KC_TRANSPARENT, LGUI_T(FR_EQL),  TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   FR_DLR,  /* */     KC_NO,        RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), FR_DIAE,
     KC_TRANSPARENT, FR_AT,           FR_BSLS,           FR_ASTR,          FR_DOT,            KC_NO,   /* */     KC_NO,        FR_RPRN,         FR_RBRC,       FR_RCBR,        FR_RABK,         KC_NO,
                                                                     KC_TRANSPARENT, KC_TRANSPARENT,   /* */     KC_TRANSPARENT, KC_TRANSPARENT
   ),
@@ -111,6 +111,30 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
+bool handle_accented_key(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+        if (mods & MOD_MASK_SHIFT || is_caps_word_on()) {
+            del_weak_mods(MOD_MASK_SHIFT);
+#ifndef NO_ACTION_ONESHOT
+            del_oneshot_mods(MOD_MASK_SHIFT);
+#endif // NO_ACTION_ONESHOT
+            unregister_mods(MOD_MASK_SHIFT);
+
+            register_code(KC_LOCKING_CAPS_LOCK);
+            tap_code16(keycode);
+            unregister_code(KC_LOCKING_CAPS_LOCK);
+
+            set_mods(mods);
+        } else {
+            tap_code16(keycode);
+        }
+    }
+    return false;
+}
+
+
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_achordion(keycode, record)) {
         return false;
@@ -118,51 +142,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
     switch (keycode) {
         case FR_EACU:
-            if (record->event.pressed) {
-                const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
-                if (mods & MOD_MASK_SHIFT) {
-                    tap_code16(C(S(FR_U)));
-                    wait_ms(10);
-                    tap_code16(FR_C);
-                    wait_ms(10);
-                    tap_code16(FR_9);
-                    wait_ms(10);
-
-                    del_weak_mods(MOD_MASK_SHIFT);
-#ifndef NO_ACTION_ONESHOT
-                    del_oneshot_mods(MOD_MASK_SHIFT);
-#endif // NO_ACTION_ONESHOT
-                    unregister_mods(MOD_MASK_SHIFT);
-                    tap_code16(KC_SPACE);
-                    set_mods(mods);
-                } else {
-                    tap_code16(FR_EACU);
-                }
-            }
-            return false;
         case FR_AGRV:
-            if (record->event.pressed) {
-                const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
-                if (mods & MOD_MASK_SHIFT) {
-                    tap_code16(C(S(FR_U)));
-                    wait_ms(10);
-                    tap_code16(FR_C);
-                    wait_ms(10);
-                    tap_code16(FR_0);
-                    wait_ms(10);
-
-                    del_weak_mods(MOD_MASK_SHIFT);
-#ifndef NO_ACTION_ONESHOT
-                    del_oneshot_mods(MOD_MASK_SHIFT);
-#endif // NO_ACTION_ONESHOT
-                    unregister_mods(MOD_MASK_SHIFT);
-                    tap_code16(KC_SPACE);
-                    set_mods(mods);
-                } else {
-                    tap_code16(FR_AGRV);
-                }
-            }
-            return false;
+        case FR_CCED:
+            return handle_accented_key(keycode & 0xFF, record);
         case LT(0, FR_Y):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(C(FR_X)); // Intercept hold function to send Ctrl-X
@@ -174,7 +156,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 tap_code16(C(FR_C)); // Intercept hold function to send Ctrl-C
                 return false;
             }
-            return true;
+            return handle_accented_key(FR_EGRV, record);
     }
 
     return true;
@@ -311,6 +293,8 @@ bool caps_word_press_user(uint16_t keycode) {
         case FR_AGRV:
         case FR_EGRV:
         case FR_EACU:
+        case FR_QUOT:
+        case FR_CIRC:
             add_weak_mods(MOD_BIT(KC_LSFT)); // Apply shift to next key.
             return true;
 
