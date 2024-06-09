@@ -77,6 +77,15 @@ combo_t                key_combos[] = {
     COMBO(combo_d_f, FR_UGRV), //
 };
 
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LGUI_T(FR_A):
+            return TAPPING_TERM + 200;
+        default:
+            return TAPPING_TERM;
+    }
+}
+
 #define PPCAT_NX(A, B) A##B
 #define GUI_NUM(num, key) &ko_make_basic(MOD_MASK_GUI | MOD_MASK_SHIFT, PPCAT_NX(FR_, num), G(S(key))), &ko_make_basic(MOD_MASK_GUI, PPCAT_NX(FR_, num), G(key))
 
@@ -84,8 +93,6 @@ const key_override_t **key_overrides = (const key_override_t *[]){
     &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),                    //
     &ko_make_basic(MOD_MASK_SHIFT, FR_QUOT, FR_QUES),                    //
     &ko_make_basic(MOD_MASK_SHIFT, FR_CIRC, FR_EXLM),                    //
-    &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_HOME, S(KC_HOME)), //
-    &ko_make_basic(MOD_MASK_SHIFT | MOD_MASK_CTRL, KC_END, S(KC_END)),   //
     GUI_NUM(0, FR_AGRV),                                                 //
     GUI_NUM(1, FR_AMPR),                                                 //
     GUI_NUM(2, FR_EACU),                                                 //

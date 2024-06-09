@@ -4,6 +4,7 @@
 */
 
 #define TAPPING_TERM 175
+#define TAPPING_TERM_PER_KEY
 #define QUICK_TAP_TERM 0
 #define QUICK_TAP_TERM_PER_KEY
 #define PERMISSIVE_HOLD
