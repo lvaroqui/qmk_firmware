@@ -66,15 +66,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-const uint16_t PROGMEM combo_d_l[]  = {FR_D, FR_L, COMBO_END};
-const uint16_t PROGMEM combo_c_m[]  = {FR_C, FR_M, COMBO_END};
-const uint16_t PROGMEM combo_m_h[]  = {FR_M, FR_H, COMBO_END};
-const uint16_t PROGMEM combo_d_f[]  = {FR_F, FR_D, COMBO_END};
-combo_t                key_combos[] = {
-    COMBO(combo_d_l, FR_Q),    //
-    COMBO(combo_c_m, FR_CCED), //
-    COMBO(combo_m_h, FR_Z),    //
-    COMBO(combo_d_f, FR_UGRV), //
+const uint16_t PROGMEM combo_ctrl_enter[]  = {LCTL_T(FR_U), LT(1, KC_ENTER), COMBO_END};
+const uint16_t PROGMEM combo_shift_enter[] = {LSFT_T(FR_E), LT(1, KC_ENTER), COMBO_END};
+const uint16_t PROGMEM combo_d_l[]         = {FR_D, FR_L, COMBO_END};
+const uint16_t PROGMEM combo_c_m[]         = {FR_C, FR_M, COMBO_END};
+const uint16_t PROGMEM combo_m_h[]         = {FR_M, FR_H, COMBO_END};
+const uint16_t PROGMEM combo_d_f[]         = {FR_F, FR_D, COMBO_END};
+combo_t                key_combos[]        = {
+    COMBO(combo_ctrl_enter, FR_UNDS),  //
+    COMBO(combo_shift_enter, FR_MINS), //
+    COMBO(combo_d_l, FR_Q),            //
+    COMBO(combo_c_m, FR_CCED),         //
+    COMBO(combo_m_h, FR_Z),            //
+    COMBO(combo_d_f, FR_UGRV),         //
 };
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
@@ -88,6 +92,14 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
 #define PPCAT_NX(A, B) A##B
 #define GUI_NUM(num, key) &ko_make_basic(MOD_MASK_GUI | MOD_MASK_SHIFT, PPCAT_NX(FR_, num), G(S(key))), &ko_make_basic(MOD_MASK_GUI, PPCAT_NX(FR_, num), G(key))
+
+void keyboard_post_init_user(void) {
+    // Customise these values to desired behaviour
+    // debug_enable = true;
+    // debug_matrix = true;
+    // debug_keyboard=true;
+    // debug_mouse=true;
+}
 
 const key_override_t **key_overrides = (const key_override_t *[]){
     &ko_make_basic(MOD_MASK_SHIFT, FR_COMM, FR_SCLN),             //
@@ -141,6 +153,8 @@ bool handle_accented_key(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    dprintf("%hu %d\n", keycode, record->event.pressed);
+
     if (!process_achordion(keycode, record)) {
         return false;
     }
