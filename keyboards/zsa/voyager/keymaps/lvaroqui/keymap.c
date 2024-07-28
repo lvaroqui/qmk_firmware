@@ -17,6 +17,7 @@ enum {
     HOME_SHORT_SHFT,
     HOME_SHORT_CTRL,
     CT_DOT,
+    CT_EGRV,
 };
 
 // clang-format off
@@ -25,13 +26,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     DB_TOGG,            FR_1,           FR_2,         FR_3,            FR_4,              FR_5,      /* */     FR_6,           FR_7,           FR_8,           FR_9,           FR_0,           KC_PRINT_SCREEN,
     KC_TAB,             FR_AGRV,        FR_J,         FR_O,            FR_EACU,           FR_B,      /* */     FR_F,           FR_D,           FR_L,           FR_QUOT,        FR_X,           FR_UGRV,
     CW_TOGG,            LGUI_T(FR_A),   LALT_T(FR_I), LSFT_T(FR_E),    LCTL_T(FR_U),      FR_COMM,   /* */     FR_P,           RCTL_T(FR_T),   RSFT_T(FR_S),   LALT_T(FR_R),   RGUI_T(FR_N),   FR_CIRC,
-    C(FR_Z),            FR_K,           LT(0, FR_Y),  LT(0, FR_EGRV),  TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           KC_APP,
+    C(FR_Z),            FR_K,           LT(0, FR_Y),  TD(CT_EGRV),     TD(CT_DOT),        FR_W,      /* */     FR_G,           FR_C,           FR_M,           FR_H,           FR_V,           KC_APP,
                                                                  LT(1, KC_ENTER), LT(3, KC_ESC),     /* */     LT(4, KC_BACKSPACE), LT(2, KC_SPACE)
   ),
   [1] = LAYOUT(
     QK_BOOTLOADER,  KC_F1,           KC_F2,             KC_F3,            KC_F4,             KC_F5,   /* */     KC_F6,        KC_F7,           KC_F8,         KC_F9,          KC_F10,          KC_F11,
-    KC_TRANSPARENT, FR_HASH,         FR_PLUS,           FR_AMPR,          FR_DQUO,           KC_NO,   /* */     KC_NO,        FR_PIPE,         FR_TILD,       FR_PERC,        FR_GRV,          KC_F12,
-    KC_TRANSPARENT, LGUI_T(FR_EQL),  TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   FR_DLR,  /* */     KC_NO,        RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), FR_DIAE,
+    KC_TRANSPARENT, FR_HASH,         FR_PLUS,           FR_AMPR,          FR_DQUO,           KC_NO,   /* */     FR_QUES,      FR_PIPE,         FR_TILD,       FR_PERC,        FR_GRV,          KC_F12,
+    KC_TRANSPARENT, LGUI_T(FR_EQL),  TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   FR_DLR,  /* */     FR_EXLM,      RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), FR_DIAE,
     KC_TRANSPARENT, FR_AT,           FR_BSLS,           LT(0,FR_ASTR),    LT(0,FR_DOT),      KC_NO,   /* */     KC_NO,        FR_RPRN,         FR_RBRC,       FR_RCBR,        FR_RABK,         KC_NO,
                                                                     KC_TRANSPARENT, KC_TRANSPARENT,   /* */     KC_TRANSPARENT, KC_TRANSPARENT
   ),
@@ -130,26 +131,35 @@ uint16_t get_quick_tap_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 
-bool handle_accented_key(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed) {
-        const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
-        if (mods & MOD_MASK_SHIFT || is_caps_word_on()) {
-            del_weak_mods(MOD_MASK_SHIFT);
-#ifndef NO_ACTION_ONESHOT
-            del_oneshot_mods(MOD_MASK_SHIFT);
-#endif // NO_ACTION_ONESHOT
-            unregister_mods(MOD_MASK_SHIFT);
-
-            register_code(KC_LOCKING_CAPS_LOCK);
-            tap_code16(keycode);
-            unregister_code(KC_LOCKING_CAPS_LOCK);
-
-            set_mods(mods);
-        } else {
-            tap_code16(keycode);
-        }
+bool is_accented_key(uint16_t keycode) {
+    switch (keycode) {
+        case FR_EACU:
+        case FR_AGRV:
+        case FR_CCED:
+        case FR_EGRV:
+            return true;
+        default:
+            return false;
     }
-    return false;
+}
+
+bool tap_accented_key(uint16_t keycode) {
+    const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+    if (mods & MOD_MASK_SHIFT || is_caps_word_on()) {
+        dprintf("tap it\n");
+        del_weak_mods(MOD_MASK_SHIFT);
+        del_oneshot_mods(MOD_MASK_SHIFT);
+        unregister_mods(MOD_MASK_SHIFT);
+
+        register_code(KC_LOCKING_CAPS_LOCK);
+        tap_code16(keycode);
+        unregister_code(KC_LOCKING_CAPS_LOCK);
+
+        set_mods(mods);
+        return false;
+    } else {
+        return true;
+    }
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -157,37 +167,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
     }
 
-    switch (keycode) {
-        case FR_EACU:
-        case FR_AGRV:
-        case FR_CCED:
-            return handle_accented_key(keycode & 0xFF, record);
-        case LT(0, FR_Y):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(FR_X)); // Intercept hold function to send Ctrl-X
-                return false;
-            }
-            return true;
-        case LT(0, FR_EGRV):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(FR_C)); // Intercept hold function to send Ctrl-C
-                return false;
-            }
-            return handle_accented_key(FR_EGRV, record);
-        case LT(0, FR_ASTR):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(S(FR_C))); // Intercept hold function to send Ctrl-X
-                return false;
-            }
-            return true;
-        case LT(0, FR_DOT):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(S(FR_V))); // Intercept hold function to send Ctrl-X
-                return false;
-            }
-            return true;
+    if (record->event.pressed && is_accented_key(keycode)) {
+        return tap_accented_key(keycode & 0xFF);
     }
 
+    if (record->event.pressed) {
+        switch (keycode) {
+            case LT(0, FR_ASTR):
+                if (!record->tap.count && record->event.pressed) {
+                    tap_code16(C(S(FR_C)));
+                    return false;
+                }
+                return true;
+            case LT(0, FR_Y):
+                if (!record->tap.count && record->event.pressed) {
+                    tap_code16(C(FR_X));
+                    return false;
+                }
+                return true;
+            case LT(0, FR_DOT):
+                if (!record->tap.count && record->event.pressed) {
+                    tap_code16(C(S(FR_V)));
+                    return false;
+                }
+                return true;
+        }
+    }
     return true;
 }
 
@@ -214,53 +219,80 @@ uint16_t achordion_timeout(uint16_t tap_hold_keycode) {
 typedef struct {
     uint16_t tap;
     uint16_t tap_shifted;
+    uint16_t double_tap;
     uint16_t hold;
+    uint16_t double_hold;
     uint16_t held;
 } tap_dance_tap_hold_t;
+
+void tap_while_shifted(uint16_t key) {
+    if (QK_MODS_GET_MODS(key) & MOD_LSFT) {
+        // Key requires Shift
+        tap_code16(key); // If so, press directly.
+    } else {
+        // If not, cancel shift mods, press the key, and restore mods.
+        const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+        del_weak_mods(MOD_MASK_SHIFT);
+        del_oneshot_mods(MOD_MASK_SHIFT);
+        unregister_mods(MOD_MASK_SHIFT);
+        tap_code16(key);
+        set_mods(mods);
+    }
+}
+
+bool tap_dance_has_double_tap(tap_dance_state_t *state, const tap_dance_tap_hold_t *tap_hold) {
+    return tap_hold->double_tap != KC_NO || tap_hold->double_hold != KC_NO;
+}
 
 void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
     tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
 
-    if (state->pressed)
-#ifndef PERMISSIVE_HOLD
-        &&!state->interrupted
-#endif
-        {
+    const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+
+    // HOLD
+    if (state->pressed) {
+        if (state->count == 1) {
             register_code16(tap_hold->hold);
             tap_hold->held = tap_hold->hold;
+        } else if (state->count == 2) {
+            register_code16(tap_hold->double_hold);
+            tap_hold->held = tap_hold->double_hold;
         }
+    }
+    // TAP (if double tap registered and no shift)
+    else if (tap_dance_has_double_tap(state, tap_hold) && (mods & MOD_MASK_SHIFT) == 0 && !is_caps_word_on()) {
+        if (state->count == 2 && tap_hold->double_tap) {
+            tap_code16(tap_hold->double_tap);
+        } else {
+            for (uint8_t i = 0; i < state->count; i++) {
+                tap_code16(tap_hold->tap);
+            }
+        }
+    }
+    // TAP without double tap registered are handled eagerly
+    else {
+        return;
+    }
 }
 
-void tap_dance_tap_hold_released(tap_dance_state_t *state, void *user_data) {
+void tap_dance_tap_hold_on_each_released(tap_dance_state_t *state, void *user_data) {
     if (state->finished) {
         return;
     }
 
     tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
+    if (is_accented_key(tap_hold->tap) && !tap_accented_key(tap_hold->tap)) {
+        return;
+    }
 
-    const uint8_t saved_mods = get_mods();
-#ifndef NO_ACTION_ONESHOT
-    const uint8_t mods = saved_mods | get_weak_mods() | get_oneshot_mods();
-#else
-    const uint8_t mods = saved_mods | get_weak_mods();
-#endif // NO_ACTION_ONESHOT
-
-    if ((mods & MOD_MASK_SHIFT) != 0) // Shift is held
+    // eagerly press key to avoid delay with shift key
+    const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
+    if (tap_hold->tap_shifted && mods & MOD_MASK_SHIFT) // Shift is held
     {
-        if ((QK_MODS_GET_MODS(tap_hold->tap_shifted) & MOD_LSFT) != 0) // Key requires Shift
-        {
-            tap_code16(tap_hold->tap_shifted); // If so, press directly.
-        } else {
-            // If not, cancel shift mods, press the key, and restore mods.
-            del_weak_mods(MOD_MASK_SHIFT);
-#ifndef NO_ACTION_ONESHOT
-            del_oneshot_mods(MOD_MASK_SHIFT);
-#endif // NO_ACTION_ONESHOT
-            unregister_mods(MOD_MASK_SHIFT);
-            tap_code16(tap_hold->tap_shifted);
-            set_mods(mods);
-        }
-    } else {
+        tap_while_shifted(tap_hold->tap_shifted);
+    }
+    // When no double tap are bound, eagerly press key to avoid delay
+    else if (!tap_dance_has_double_tap(state, tap_hold)) {
         tap_code16(tap_hold->tap);
     }
 }
@@ -274,19 +306,20 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {
     }
 }
 
-#define ACTION_TAP_DANCE_TAP_HOLD(tap, tap_shifted, hold) \
-    { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset, tap_dance_tap_hold_released}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, tap_shifted, hold, 0}), }
+#define ACTION_TAP_DANCE_TAP_HOLD(tap, tap_shifted, hold, double_tap, double_hold) \
+    { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset, tap_dance_tap_hold_on_each_released}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, tap_shifted, double_tap, hold, double_hold, 0}), }
 
 // clang-format off
 tap_dance_action_t tap_dance_actions[] = {
-    [HOME_SLSH] = ACTION_TAP_DANCE_TAP_HOLD(FR_SLSH, KC_NO, KC_LALT),
-    [HOME_LBRC] = ACTION_TAP_DANCE_TAP_HOLD(FR_LBRC, KC_NO, KC_RSFT),
-    [HOME_LCBR] = ACTION_TAP_DANCE_TAP_HOLD(FR_LCBR, KC_NO, KC_LALT),
-    [CT_DOT]    = ACTION_TAP_DANCE_TAP_HOLD(FR_DOT, FR_COLN, C(FR_V)),
-    [HOME_SHORT_GUI]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LGUI),
-    [HOME_SHORT_ALT]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LALT),
-    [HOME_SHORT_SHFT] = ACTION_TAP_DANCE_TAP_HOLD(C(FR_S), KC_NO, KC_LSFT),
-    [HOME_SHORT_CTRL] = ACTION_TAP_DANCE_TAP_HOLD(C(S(FR_D)), KC_NO, KC_LCTL),
+    [HOME_SLSH] = ACTION_TAP_DANCE_TAP_HOLD(FR_SLSH, KC_NO, KC_LALT, KC_NO, KC_NO),
+    [HOME_LBRC] = ACTION_TAP_DANCE_TAP_HOLD(FR_LBRC, KC_NO, KC_RSFT, KC_NO, KC_NO),
+    [HOME_LCBR] = ACTION_TAP_DANCE_TAP_HOLD(FR_LCBR, KC_NO, KC_LALT, KC_NO, KC_NO),
+    [CT_DOT]    = ACTION_TAP_DANCE_TAP_HOLD(FR_DOT, FR_COLN, C(FR_V), KC_NO, S(C(FR_V))),
+    [CT_EGRV]   = ACTION_TAP_DANCE_TAP_HOLD(FR_EGRV, FR_EGRV, C(FR_C), KC_NO, S(C(FR_C))),
+    [HOME_SHORT_GUI]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LGUI, KC_NO, KC_NO),
+    [HOME_SHORT_ALT]  = ACTION_TAP_DANCE_TAP_HOLD(KC_NO, KC_NO, KC_LALT, G(FR_Q), KC_NO),
+    [HOME_SHORT_SHFT] = ACTION_TAP_DANCE_TAP_HOLD(C(FR_S), KC_NO, KC_LSFT, KC_NO, KC_NO),
+    [HOME_SHORT_CTRL] = ACTION_TAP_DANCE_TAP_HOLD(C(S(FR_D)), KC_NO, KC_LCTL, KC_NO, KC_NO),
 };
 // clang-format on
 
@@ -340,6 +373,7 @@ bool caps_word_press_user(uint16_t keycode) {
         case KC_BSPC:
         case KC_DEL:
         case FR_UNDS:
+        case TD(CT_EGRV):
             return true;
 
         default:
