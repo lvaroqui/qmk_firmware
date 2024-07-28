@@ -32,7 +32,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     QK_BOOTLOADER,  KC_F1,           KC_F2,             KC_F3,            KC_F4,             KC_F5,   /* */     KC_F6,        KC_F7,           KC_F8,         KC_F9,          KC_F10,          KC_F11,
     KC_TRANSPARENT, FR_HASH,         FR_PLUS,           FR_AMPR,          FR_DQUO,           KC_NO,   /* */     KC_NO,        FR_PIPE,         FR_TILD,       FR_PERC,        FR_GRV,          KC_F12,
     KC_TRANSPARENT, LGUI_T(FR_EQL),  TD(HOME_SLSH),     LSFT_T(FR_MINS),  LCTL_T(FR_UNDS),   FR_DLR,  /* */     KC_NO,        RCTL_T(FR_LPRN), TD(HOME_LBRC), TD(HOME_LCBR),  RGUI_T(FR_LABK), FR_DIAE,
-    KC_TRANSPARENT, FR_AT,           FR_BSLS,           FR_ASTR,          FR_DOT,            KC_NO,   /* */     KC_NO,        FR_RPRN,         FR_RBRC,       FR_RCBR,        FR_RABK,         KC_NO,
+    KC_TRANSPARENT, FR_AT,           FR_BSLS,           LT(0,FR_ASTR),    LT(0,FR_DOT),      KC_NO,   /* */     KC_NO,        FR_RPRN,         FR_RBRC,       FR_RCBR,        FR_RABK,         KC_NO,
                                                                     KC_TRANSPARENT, KC_TRANSPARENT,   /* */     KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [2] = LAYOUT(
@@ -153,8 +153,6 @@ bool handle_accented_key(uint16_t keycode, keyrecord_t *record) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    dprintf("%hu %d\n", keycode, record->event.pressed);
-
     if (!process_achordion(keycode, record)) {
         return false;
     }
@@ -176,6 +174,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return handle_accented_key(FR_EGRV, record);
+        case LT(0, FR_ASTR):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(C(S(FR_C))); // Intercept hold function to send Ctrl-X
+                return false;
+            }
+            return true;
+        case LT(0, FR_DOT):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(C(S(FR_V))); // Intercept hold function to send Ctrl-X
+                return false;
+            }
+            return true;
     }
 
     return true;
