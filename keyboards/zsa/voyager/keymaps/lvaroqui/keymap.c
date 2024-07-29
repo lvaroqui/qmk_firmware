@@ -247,8 +247,6 @@ bool tap_dance_has_double_tap(tap_dance_state_t *state, const tap_dance_tap_hold
 void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
     tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
 
-    const uint8_t mods = get_mods() | get_weak_mods() | get_oneshot_mods();
-
     // HOLD
     if (state->pressed) {
         if (state->count == 1) {
@@ -259,19 +257,11 @@ void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
             tap_hold->held = tap_hold->double_hold;
         }
     }
-    // TAP (if double tap registered and no shift)
-    else if (tap_dance_has_double_tap(state, tap_hold) && (mods & MOD_MASK_SHIFT) == 0 && !is_caps_word_on()) {
-        if (state->count == 2 && tap_hold->double_tap) {
-            tap_code16(tap_hold->double_tap);
-        } else {
-            for (uint8_t i = 0; i < state->count; i++) {
-                tap_code16(tap_hold->tap);
-            }
-        }
-    }
-    // TAP without double tap registered are handled eagerly
+    // TAP
     else {
-        return;
+        for (uint8_t i = 0; i < state->count; i++) {
+            tap_code16(tap_hold->tap);
+        }
     }
 }
 
@@ -290,10 +280,24 @@ void tap_dance_tap_hold_on_each_released(tap_dance_state_t *state, void *user_da
     if (tap_hold->tap_shifted && mods & MOD_MASK_SHIFT) // Shift is held
     {
         tap_while_shifted(tap_hold->tap_shifted);
+        reset_tap_dance(state);
     }
     // When no double tap are bound, eagerly press key to avoid delay
     else if (!tap_dance_has_double_tap(state, tap_hold)) {
         tap_code16(tap_hold->tap);
+        reset_tap_dance(state);
+    }
+    // If key was released two times, eagerly send double tap to avoid delay
+    else if (tap_hold->double_tap && state->count == 2) {
+        tap_code16(tap_hold->double_tap);
+        reset_tap_dance(state);
+    }
+    // If key was released two times, eagerly send key twice to avoid delay
+    else if (state->count == 2) {
+        for (int i = 0; i < 2; i++) {
+            tap_code16(tap_hold->tap);
+        }
+        reset_tap_dance(state);
     }
 }
 
