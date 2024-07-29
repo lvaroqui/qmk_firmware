@@ -44,10 +44,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [3] = LAYOUT(
-    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                S(C(FR_A)),          KC_NO,        /* */      KC_NO,       KC_NO,     KC_NO,     KC_NO,  KC_NO,     KC_NO,
-    KC_TRANSPARENT,     C(A(FR_UNDS)),      KC_NO,              KC_NO,                S(C(FR_COLN)),       KC_DELETE,    /* */      FR_COMM,     FR_7,      FR_8,      FR_9,   FR_COMM,   KC_NO,
-    G(FR_Q),            TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE, /* */      FR_DOT,      FR_4,      FR_5,      FR_6,   FR_0,      KC_NO,
-    KC_TRANSPARENT,     S(C(FR_F)),         C(FR_F),            S(KC_F3),             KC_F3,               KC_F4,        /* */      KC_NO,       FR_1,      FR_2,      FR_3,   FR_DOT,    KC_NO,
+    KC_TRANSPARENT,     KC_NO,              KC_NO,              KC_NO,                S(C(FR_A)),          KC_NO,        /* */      FR_SLSH,     KC_NO,     KC_NO,     KC_NO,  KC_NO,     KC_NO,
+    KC_TRANSPARENT,     C(A(FR_UNDS)),      KC_NO,              KC_NO,                S(C(FR_COLN)),       KC_DELETE,    /* */      FR_ASTR,     FR_7,      FR_8,      FR_9,   FR_COMM,   KC_NO,
+    G(FR_Q),            TD(HOME_SHORT_GUI), TD(HOME_SHORT_ALT), TD(HOME_SHORT_SHFT),  TD(HOME_SHORT_CTRL), KC_BACKSPACE, /* */      FR_PLUS,     FR_4,      FR_5,      FR_6,   FR_0,      KC_NO,
+    KC_TRANSPARENT,     S(C(FR_F)),         C(FR_F),            S(KC_F3),             KC_F3,               KC_F4,        /* */      FR_MINS,     FR_1,      FR_2,      FR_3,   FR_DOT,    KC_NO,
                                                                                   KC_TRANSPARENT, KC_TRANSPARENT,        /* */      KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [4] = LAYOUT(
