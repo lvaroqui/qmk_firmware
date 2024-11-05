@@ -414,7 +414,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 rgb_matrix_set_color(i, RGB_GOLD);
                 break;
             case 0:
-                rgb_matrix_set_color(i, RGB_TEAL);
+                rgb_matrix_set_color(i, RGB_ORANGE);
                 break;
             default:
                 break;
